@@ -1,20 +1,23 @@
+// import RouterMapping from './routes/RouterMapping';
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import Login from './pages/Login';
+import NotFound from './pages/NotFound';
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {/* <header>
+        <a href="/">Login </a>
+        <a href="/home">Home</a>
+        <a href="/home">Logout</a>
+      </header> */}
+      <Routes>
+        <Route path={'/'} element={<Login />} />
+        <Route path={'/home'} element={<HomePage />} />
+        <Route path={'/*'} element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
 
