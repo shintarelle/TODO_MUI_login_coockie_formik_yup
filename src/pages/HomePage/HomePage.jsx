@@ -13,6 +13,7 @@ const HomePage = () => {
   const handleSubmit = data => {
     let dataCopy = cloneDeep(data);
     dataCopy.id = uuidv4();
+    dataCopy.status = 'pending';
     const newTodoItems = [dataCopy, ...todoItems];
     setTodosItems(newTodoItems);
     localStorage.setItem(StorageKey, JSON.stringify(newTodoItems));
@@ -25,34 +26,33 @@ const HomePage = () => {
     }
   }, []);
 
-  console.log('todoItems', todoItems);
   return (
     <BaseTemplate className={'home-page'}>
       <Container maxWidth="lg">
         <Typography variant="h4" gutterBottom textAlign={'center'}>
           Welcome to the Home Page!
         </Typography>
-        <Grid
-          container
-          rowSpacing={2}
-          columnSpacing={0}
-          bgcolor={'grey'}
-          py={'10px'}
-          m={0}
-        >
-          <Grid item xs={6} bgcolor={'yellow'}>
+        <Grid container rowSpacing={2} columnSpacing={0} py={'10px'} mb={3}>
+          <Grid item xs={6}>
             <CreateTodoForm handleSubmit={handleSubmit} />
           </Grid>
-          <Grid item xs={6} bgcolor={'pink'} p={0}>
-            <Box display={'flex'} flexDirection={'column'} gap={3}>
-              {todoItems.map(item => (
-                <TodoListItem
-                  title={item.title}
-                  description={item.description}
-                  key={item.id}
-                />
-              ))}
-            </Box>
+          <Grid item xs={6} p={0} mb={3}>
+            <Container>
+              <Typography variant="h4" gutterBottom>
+                Todo List
+              </Typography>
+              <Box display={'flex'} flexDirection={'column'} gap={3}>
+                {todoItems.map(item => (
+                  <TodoListItem
+                    id={item.id}
+                    title={item.title}
+                    description={item.description}
+                    status={item.status}
+                    key={item.id}
+                  />
+                ))}
+              </Box>
+            </Container>
           </Grid>
         </Grid>
       </Container>
