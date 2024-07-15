@@ -1,6 +1,7 @@
 const routeNames = {
-  homePage: '/',
-  loginPage: '/login',
+  login: '/',
+  home: '/home',
+  todolist: '/todolist',
   notFound: '*',
 };
 
