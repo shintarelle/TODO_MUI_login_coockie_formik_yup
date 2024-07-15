@@ -19,6 +19,23 @@ const HomePage = () => {
     localStorage.setItem(StorageKey, JSON.stringify(newTodoItems));
   };
 
+  const handleDelete = id => {
+    const updatedTodoItems = todoItems.filter(item => item.id !== id);
+    setTodosItems(updatedTodoItems);
+    localStorage.setItem(StorageKey, JSON.stringify(updatedTodoItems));
+  };
+
+  const handleStatusChange = (id, newStatus) => {
+    const updatedTodoItems = todoItems.map(item => {
+      if (item.id === id) {
+        return { ...item, status: newStatus };
+      }
+      return item;
+    });
+    setTodosItems(updatedTodoItems);
+    localStorage.setItem(StorageKey, JSON.stringify(updatedTodoItems));
+  };
+
   useEffect(() => {
     const storedItems = localStorage.getItem(StorageKey);
     if (storedItems) {
@@ -49,6 +66,8 @@ const HomePage = () => {
                     description={item.description}
                     status={item.status}
                     key={item.id}
+                    onDelete={handleDelete}
+                    onStatusChange={handleStatusChange}
                   />
                 ))}
               </Box>

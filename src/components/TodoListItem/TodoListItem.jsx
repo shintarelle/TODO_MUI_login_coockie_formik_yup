@@ -11,7 +11,14 @@ import {
 import { useNavigate } from 'react-router-dom';
 import routeNames from '../../routes/routeNames';
 
-function TodoListItem({ id, title, description, status }) {
+function TodoListItem({
+  id,
+  title,
+  description,
+  status,
+  onDelete,
+  onStatusChange,
+}) {
   const [itemStatus, setItemStatus] = React.useState(status);
   const navigate = useNavigate();
 
@@ -20,8 +27,11 @@ function TodoListItem({ id, title, description, status }) {
   };
 
   const handleChange = event => {
-    setItemStatus(event.target.value);
+    const newStatus = event.target.value;
+    setItemStatus(newStatus);
+    onStatusChange(id, newStatus);
   };
+
   const handleSelectClick = event => {
     event.stopPropagation();
   };
@@ -65,7 +75,7 @@ function TodoListItem({ id, title, description, status }) {
               size="small"
               onClick={e => {
                 e.stopPropagation();
-                // обработка клика по кнопке
+                onDelete(id);
               }}
             >
               Delete
@@ -81,5 +91,7 @@ TodoListItem.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onStatusChange: PropTypes.func.isRequired,
 };
 export default TodoListItem;
