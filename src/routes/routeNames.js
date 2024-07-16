@@ -1,6 +1,7 @@
 const routeNames = {
   login: '/',
   home: '/home',
+  create: '/create',
   todolist: '/todolist',
   todoitem: '/todolist/:id',
   notFound: '*',

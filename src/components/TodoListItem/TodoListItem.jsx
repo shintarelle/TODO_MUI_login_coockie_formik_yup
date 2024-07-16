@@ -23,7 +23,7 @@ function TodoListItem({
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(routeNames.todoitem.replace(':id', id));
+    navigate(routeNames.todoitem.replace('id', `${id}`));
   };
 
   const handleChange = event => {
@@ -41,8 +41,19 @@ function TodoListItem({
       onClick={handleCardClick}
       style={{ cursor: 'pointer' }}
     >
-      <Paper elevation={6} style={{ borderRadius: '10px' }}>
-        <Box display="flex" justifyContent={'space-between'} gap={1} p={2}>
+      <Paper
+        elevation={6}
+        style={{
+          borderRadius: '10px',
+        }}
+      >
+        <Box
+          display="flex"
+          justifyContent={'space-between'}
+          gap={1}
+          p={2}
+          sx={{ backgroundColor: '#dff2f3', color: '#000' }}
+        >
           <Box display="flex" flexDirection={'column'} gap={1}>
             <Typography variant={'h6'} textAlign={'left'}>
               {title}
@@ -73,6 +84,7 @@ function TodoListItem({
             <Button
               variant={'contained'}
               size="small"
+              sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
               onClick={e => {
                 e.stopPropagation();
                 onDelete(id);

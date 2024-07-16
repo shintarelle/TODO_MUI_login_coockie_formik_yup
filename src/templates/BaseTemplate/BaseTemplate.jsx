@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
+import { Button, Container } from '@mui/material';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,25 +23,31 @@ const BaseTemplate = ({ className = null, children }) => {
 
   return (
     <main className={className}>
-      {isLoggedIn ? (
-        <>
-          <div
-            style={{
-              padding: '10px',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: '20px',
-            }}
-          >
-            <Button variant="outlined" onClick={handleLogout}>
-              LogOut
-            </Button>
-          </div>
-          {children}
-        </>
-      ) : (
-        <h1>Redirecting to login...</h1>
-      )}
+      <Container maxWidth="lg">
+        {isLoggedIn ? (
+          <>
+            <div
+              style={{
+                padding: '10px',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '20px',
+              }}
+            >
+              <Button
+                variant="outlined"
+                sx={{ color: '#007974', borderColor: '#007974' }}
+                onClick={handleLogout}
+              >
+                LogOut
+              </Button>
+            </div>
+            {children}
+          </>
+        ) : (
+          <h1>Redirecting to login...</h1>
+        )}
+      </Container>
     </main>
   );
 };
