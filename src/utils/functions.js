@@ -18,7 +18,6 @@ class LocalStorageService {
     if (!data.id) throw new Error('no id on todo item');
     const saveData = JSON.parse(this.getData());
     const newData = [data, ...saveData];
-    // saveData.push(data);
     localStorage.setItem(this.key, JSON.stringify(newData));
     return this.getData().at(-1);
   }

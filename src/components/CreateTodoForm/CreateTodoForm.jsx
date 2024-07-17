@@ -1,17 +1,12 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
-import validationSchema from './validationSchema';
+import validationSchema from './createTodoValidSchema';
 import { TextField as FormikTextField } from 'formik-mui';
 import { Box } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import PropTypes from 'prop-types';
 
-const CreateTodoForm = ({
-  handleSubmit,
-  formInitialValues,
-  isLoading,
-  handleClick,
-}) => {
+const CreateTodoForm = ({ handleSubmit, formInitialValues, isLoading }) => {
   return (
     <Formik
       initialValues={formInitialValues}
@@ -49,14 +44,7 @@ const CreateTodoForm = ({
             <LoadingButton
               variant="contained"
               disabled={isSubmitting}
-              onClick={() => {
-                const clickHandler = handleClick({
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                });
-                clickHandler();
-                submitForm();
-              }}
+              onClick={submitForm}
               fullWidth
               loading={isLoading}
               sx={{
@@ -86,6 +74,5 @@ CreateTodoForm.propTypes = {
     description: PropTypes.string || '',
   }).isRequired,
   isLoading: PropTypes.bool.isRequired,
-  handleClick: PropTypes.func.isRequired,
 };
 export default CreateTodoForm;

@@ -10,10 +10,10 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import localStorageService from '../../utils/functions';
-import CastomHeading from '../../components/CastomHeading';
+import CastomHeading from '../../components/CastomHeading/CastomHeading';
 import TodoListItem from '../../components/TodoListItem/TodoListItem';
 import { useNavigate } from 'react-router-dom';
-import routeNames from '../../routes/routeNames';
+import routeNames from '../../router/routeNames';
 
 const HomePage = () => {
   const [todoItems, setTodoItems] = useState([]);

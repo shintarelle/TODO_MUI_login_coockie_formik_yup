@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { StorageKey } from '../utils/const';
-import BaseTemplate from '../templates/BaseTemplate';
-import CastomHeading from '../components/CastomHeading';
-import TodoItem from '../components/TodoItem/TodoItem';
-import { Container, Typography, Box } from '@mui/material';
-import routeNames from '../routes/routeNames';
+import { StorageKey } from '../../utils/const';
+import BaseTemplate from '../../templates/BaseTemplate';
+import CastomHeading from '../../components/CastomHeading/CastomHeading';
+import TodoItem from '../../components/TodoItem';
+import { Box } from '@mui/material';
+import routeNames from '../../router/routeNames';
 
 function TodoItemPage() {
   const [todoTitle, setTodoTitle] = useState('');

@@ -8,7 +8,7 @@ import {
   FormControl,
   NativeSelect,
 } from '@mui/material';
-import CreateTodoForm from '../CreateTodoForm/CreateTodoForm';
+import CreateTodoForm from '../CreateTodoForm';
 
 function TodoItem({
   id,
@@ -22,6 +22,7 @@ function TodoItem({
   setIsEdit,
 }) {
   const [itemStatus, setItemStatus] = useState(status);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formInitialValues = {
     title,
@@ -45,6 +46,7 @@ function TodoItem({
             <CreateTodoForm
               handleSubmit={handleSubmit}
               formInitialValues={formInitialValues}
+              isLoading={isLoading}
             />
           ) : (
             <Box display="flex" flexDirection={'column'} gap={1}>

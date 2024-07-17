@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
-import localStorageService from '../utils/functions';
+import localStorageService from '../../utils/functions';
 import { cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
-import routeNames from '../routes/routeNames';
-import BaseTemplate from '../templates/BaseTemplate';
-import CastomHeading from '../components/CastomHeading';
-import CreateTodoForm from '../components/CreateTodoForm/CreateTodoForm';
+import routeNames from '../../router/routeNames';
+import BaseTemplate from '../../templates/BaseTemplate';
+import CastomHeading from '../../components/CastomHeading';
+import CreateTodoForm from '../../components/CreateTodoForm';
 import { Container, Typography, Alert } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 
@@ -22,14 +22,10 @@ const CreateTodoItem = () => {
   const timerId = useRef();
   const [state, setState] = useState({
     open: false,
-    vertical: 'top',
+    vertical: 'bottom',
     horizontal: 'center',
   });
   const { vertical, horizontal, open } = state;
-
-  const handleClick = newState => () => {
-    setState({ ...newState, open: true });
-  };
 
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -51,6 +47,8 @@ const CreateTodoItem = () => {
     dataCopy.id = uuidv4();
     dataCopy.status = 'pending';
 
+    setState({ vertical: 'bottom', horizontal: 'center', open: true });
+
     timerId.current = setTimeout(() => {
       try {
         const newTodoItems = [dataCopy, ...todoItems];
@@ -66,6 +64,11 @@ const CreateTodoItem = () => {
   };
 
   useEffect(() => {
+    if (open) {
+      console.log('Snackbar should be open now');
+    }
+  }, [open]);
+  useEffect(() => {
     return () => {
       if (timerId.current) clearTimeout(timerId.current);
     };
@@ -79,7 +82,6 @@ const CreateTodoItem = () => {
           handleSubmit={handleSubmit}
           formInitialValues={formInitialValues}
           isLoading={isLoading}
-          handleClick={handleClick}
         />
         {isError && <Typography>Oooops, something went wrong</Typography>}
         <Snackbar

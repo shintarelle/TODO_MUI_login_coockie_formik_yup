@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../../components/LoginForm';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
