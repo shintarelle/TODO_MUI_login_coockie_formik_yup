@@ -4,10 +4,14 @@ import {
   Typography,
   Paper,
   Box,
-  Button,
   FormControl,
-  NativeSelect,
+  IconButton,
+  Select,
+  MenuItem,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DrawIcon from '@mui/icons-material/Draw';
 import { useNavigate } from 'react-router-dom';
 import routeNames from '../../router/routeNames';
 
@@ -22,7 +26,7 @@ function TodoListItem({
   const [itemStatus, setItemStatus] = React.useState(status);
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
+  const handleViewTodo = id => {
     navigate(routeNames.todoitem.replace('id', `${id}`));
   };
 
@@ -32,70 +36,84 @@ function TodoListItem({
     onStatusChange(id, newStatus);
   };
 
-  const handleSelectClick = event => {
-    event.stopPropagation();
-  };
   return (
-    <Box
-      onMouseDown={e => e.stopPropagation()}
-      onClick={handleCardClick}
-      style={{ cursor: 'pointer' }}
+    <Paper
+      elevation={6}
+      style={{
+        borderRadius: '10px',
+      }}
     >
-      <Paper
-        elevation={6}
-        style={{
-          borderRadius: '10px',
-        }}
+      <Box
+        display="flex"
+        flexDirection={'column'}
+        justifyContent={'space-between'}
+        gap={4}
+        p={2}
+        sx={{ backgroundColor: '#dff2f3', color: '#000' }}
       >
+        <Typography variant={'h6'} textAlign={'left'}>
+          {title}
+        </Typography>
+        <Typography variant={'subtitle1'}>{description}</Typography>
         <Box
+          sx={{ width: '100%' }}
           display="flex"
+          flexDirection={'column'}
           justifyContent={'space-between'}
-          gap={1}
-          p={2}
-          sx={{ backgroundColor: '#dff2f3', color: '#000' }}
+          gap={2}
         >
-          <Box display="flex" flexDirection={'column'} gap={1}>
-            <Typography variant={'h6'} textAlign={'left'}>
-              {title}
-            </Typography>
-            <Typography variant={'subtitle1'}>{description}</Typography>
-          </Box>
+          <FormControl>
+            <Select
+              labelId="status-select-label"
+              id="status-select"
+              value={itemStatus}
+              onChange={handleChange}
+              size="small"
+              sx={{ width: 150 }}
+            >
+              <MenuItem value={'pending'}>Pending</MenuItem>
+              <MenuItem value={'completed'}>Completed</MenuItem>
+              <MenuItem value={'not-completed'}>Not-Completed</MenuItem>
+            </Select>
+          </FormControl>
           <Box
             display="flex"
-            flexDirection={'column'}
             gap={1}
-            maxWidth={'120px'}
+            width={'100%'}
+            justifyContent={'flex-end'}
+            py={'20px'}
           >
-            <FormControl fullWidth>
-              <NativeSelect
-                value={itemStatus}
-                onChange={handleChange}
-                onClick={handleSelectClick}
-                inputProps={{
-                  name: 'status',
-                  id: 'uncontrolled-native',
-                }}
-              >
-                <option value={'pending'}>Pending</option>
-                <option value={'completed'}>Completed</option>
-                <option value={'not-completed'}>Not-Completed</option>
-              </NativeSelect>
-            </FormControl>
-            <Button
-              variant={'contained'}
-              size="small"
-              sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
+            <IconButton
+              aria-label="edit"
               onClick={e => {
-                e.stopPropagation();
                 onDelete(id);
               }}
+              sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
             >
-              Delete
-            </Button>
+              <DrawIcon />
+            </IconButton>
+            <IconButton
+              aria-label="view"
+              onClick={e => {
+                handleViewTodo(id);
+              }}
+              sx={{ backgroundColor: '#87009d', color: '#fff' }}
+            >
+              <VisibilityIcon />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              onClick={e => {
+                onDelete(id);
+              }}
+              sx={{ backgroundColor: '#d40015', color: '#fff' }}
+            >
+              <DeleteIcon />
+            </IconButton>
           </Box>
         </Box>
-      </Paper>
-    </Box>
+      </Box>
+    </Paper>
   );
 }
 TodoListItem.propTypes = {

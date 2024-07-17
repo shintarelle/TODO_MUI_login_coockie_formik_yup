@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Container } from '@mui/material';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import DeleteDialog from '../../components/DeleteDialog';
 
 const BaseTemplate = ({ className = null, children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,6 +24,7 @@ const BaseTemplate = ({ className = null, children }) => {
 
   return (
     <main className={className}>
+      <DeleteDialog />
       <Container maxWidth="lg">
         {isLoggedIn ? (
           <>

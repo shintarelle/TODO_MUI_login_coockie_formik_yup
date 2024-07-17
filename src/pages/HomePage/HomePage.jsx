@@ -14,11 +14,13 @@ import CastomHeading from '../../components/CastomHeading/CastomHeading';
 import TodoListItem from '../../components/TodoListItem/TodoListItem';
 import { useNavigate } from 'react-router-dom';
 import routeNames from '../../router/routeNames';
+import { useDialog } from '../../contexts/DeleteDialogContext';
 
 const HomePage = () => {
   const [todoItems, setTodoItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { handleClickOpen } = useDialog();
 
   const handleDelete = id => {
     const updatedTodoItems = todoItems.filter(item => item.id !== id);
@@ -37,11 +39,15 @@ const HomePage = () => {
     localStorageService.setData(updatedTodoItems);
   };
 
+  const openDeleteDialog = id => {
+    handleClickOpen(() => handleDelete(id));
+  };
+
   useEffect(() => {
     setIsLoading(true);
     const storedItems = localStorageService.getData();
     if (storedItems) {
-      setTodoItems(JSON.parse(storedItems));
+      setTodoItems(storedItems);
     }
     setTimeout(() => {
       setIsLoading(false);
@@ -84,23 +90,26 @@ const HomePage = () => {
               </Box>
             ) : (
               <Box display={'flex'} flexDirection={'column'} gap={3}>
-                {todoItems.length ? (
-                  todoItems.map(item => (
-                    <TodoListItem
-                      id={item.id}
-                      title={item.title}
-                      description={item.description}
-                      status={item.status}
-                      key={item.id}
-                      onDelete={handleDelete}
-                      onStatusChange={handleStatusChange}
-                    />
-                  ))
-                ) : (
-                  <Typography variant="subtitle.1" gutterBottom>
-                    no items
-                  </Typography>
-                )}
+                <Grid container spacing={3}>
+                  {todoItems.length ? (
+                    todoItems.map(item => (
+                      <Grid item xs={12} sm={6} md={4} key={item.id}>
+                        <TodoListItem
+                          id={item.id}
+                          title={item.title}
+                          description={item.description}
+                          status={item.status}
+                          onDelete={openDeleteDialog}
+                          onStatusChange={handleStatusChange}
+                        />
+                      </Grid>
+                    ))
+                  ) : (
+                    <Typography variant="subtitle.1" gutterBottom>
+                      no items
+                    </Typography>
+                  )}
+                </Grid>
               </Box>
             )}
           </Container>

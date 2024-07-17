@@ -29,6 +29,9 @@ const CreateTodoItem = () => {
 
   const handleClose = () => {
     setState({ ...state, open: false });
+    if (!isError) {
+      navigate(routeNames.home);
+    }
   };
 
   const navigate = useNavigate();
@@ -36,7 +39,7 @@ const CreateTodoItem = () => {
   useEffect(() => {
     const storedItems = localStorageService.getData();
     if (storedItems) {
-      setTodoItems(JSON.parse(storedItems));
+      setTodoItems(storedItems);
     }
   }, []);
 
@@ -47,27 +50,26 @@ const CreateTodoItem = () => {
     dataCopy.id = uuidv4();
     dataCopy.status = 'pending';
 
-    setState({ vertical: 'bottom', horizontal: 'center', open: true });
-
     timerId.current = setTimeout(() => {
       try {
         const newTodoItems = [dataCopy, ...todoItems];
         setTodoItems(newTodoItems);
         localStorageService.saveItem(dataCopy);
+        setState({ vertical: 'bottom', horizontal: 'center', open: true });
         setIsLoading(false);
-        navigate(routeNames.home);
       } catch (error) {
         setIsError(error.message || 'An error occurred');
         setIsLoading(false);
+        setState({ vertical: 'bottom', horizontal: 'center', open: true });
       }
     }, 1500);
   };
 
-  useEffect(() => {
-    if (open) {
-      console.log('Snackbar should be open now');
-    }
-  }, [open]);
+  // useEffect(() => {
+  //   if (open) {
+  //     console.log('Snackbar should be open now');
+  //   }
+  // }, [open]);
   useEffect(() => {
     return () => {
       if (timerId.current) clearTimeout(timerId.current);
@@ -83,22 +85,43 @@ const CreateTodoItem = () => {
           formInitialValues={formInitialValues}
           isLoading={isLoading}
         />
-        {isError && <Typography>Oooops, something went wrong</Typography>}
-        <Snackbar
-          anchorOrigin={{ vertical, horizontal }}
-          open={open}
-          autoHideDuration={3000}
-          onClose={handleClose}
-        >
-          <Alert
+
+        {isError ? (
+          <>
+            <Typography>Oooops, something went wrong</Typography>
+            <Snackbar
+              anchorOrigin={{ vertical, horizontal }}
+              open={open}
+              autoHideDuration={3000}
+              onClose={handleClose}
+            >
+              <Alert
+                onClose={handleClose}
+                severity="error"
+                variant="filled"
+                sx={{ width: '100%', backgroundColor: '#b639b6' }}
+              >
+                Error...
+              </Alert>
+            </Snackbar>
+          </>
+        ) : (
+          <Snackbar
+            anchorOrigin={{ vertical, horizontal }}
+            open={open}
+            autoHideDuration={1000}
             onClose={handleClose}
-            severity="success"
-            variant="filled"
-            sx={{ width: '100%', backgroundColor: '#007974' }}
           >
-            Todo was successfully created
-          </Alert>
-        </Snackbar>
+            <Alert
+              onClose={handleClose}
+              severity="success"
+              variant="filled"
+              sx={{ width: '100%', backgroundColor: '#007974' }}
+            >
+              Todo was successfully created
+            </Alert>
+          </Snackbar>
+        )}
       </Container>
     </BaseTemplate>
   );

@@ -6,6 +6,7 @@ import CastomHeading from '../../components/CastomHeading/CastomHeading';
 import TodoItem from '../../components/TodoItem';
 import { Box } from '@mui/material';
 import routeNames from '../../router/routeNames';
+import localStorageService from '../../utils/functions';
 
 function TodoItemPage() {
   const [todoTitle, setTodoTitle] = useState('');
@@ -18,7 +19,7 @@ function TodoItemPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedItems = JSON.parse(localStorage.getItem(StorageKey)) || [];
+    const storedItems = JSON.parse(localStorageService.getData());
     const foundItem = storedItems.find(item => item.id === itemId);
     if (foundItem) {
       setTodoTitle(foundItem.title);
@@ -28,21 +29,23 @@ function TodoItemPage() {
   }, [itemId]);
 
   const handleDelete = () => {
-    const storedItems = JSON.parse(localStorage.getItem(StorageKey)) || [];
-    const filterItems = storedItems.filter(item => item.id !== itemId);
-    localStorage.setItem(StorageKey, JSON.stringify(filterItems));
+    // const storedItems = JSON.parse(localStorage.getItem(StorageKey)) || [];
+    // const filterItems = storedItems.filter(item => item.id !== itemId);
+    // localStorage.setItem(StorageKey, JSON.stringify(filterItems));
+    localStorageService.deleteItem(itemId);
     navigate(routeNames.home);
   };
 
   const handleStatusChange = (id, newStatus) => {
-    const storedItems = JSON.parse(localStorage.getItem(StorageKey)) || [];
-    const updatedTodoItems = storedItems.map(item => {
-      if (item.id === itemId) {
-        return { ...item, status: newStatus };
-      }
-      return item;
-    });
-    localStorage.setItem(StorageKey, JSON.stringify(updatedTodoItems));
+    // const storedItems = localStorageService.getData();
+    // const updatedTodoItems = storedItems.map(item => {
+    //   if (item.id === itemId) {
+    //     return { ...item, status: newStatus };
+    //   }
+    //   return item;
+    // });
+    // localStorage.setItem(StorageKey, JSON.stringify(updatedTodoItems));
+    localStorageService.updateItem(id, newStatus);
   };
 
   const handleSubmit = data => {

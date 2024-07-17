@@ -3,7 +3,7 @@ import HomePage from '../pages/HomePage';
 import CreateTodoItem from '../pages/CreateTodoItem';
 import TodoListPage from '../pages/TodoListPage';
 import TodoItemPage from '../pages/TodoItemPage';
-import Login from '../pages/Login';
+import Login from '../pages/LoginPage';
 import NotFound from '../pages/NotFound';
 
 const pagesRoutesConfig = [
