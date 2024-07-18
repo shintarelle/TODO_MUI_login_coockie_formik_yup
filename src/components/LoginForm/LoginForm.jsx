@@ -59,7 +59,16 @@ const LoginForm = () => {
       <Button
         type="submit"
         variant="contained"
-        sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
+        sx={{
+          backgroundColor: '#39b6b6',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#007974',
+          },
+          '&:focus': {
+            backgroundColor: '#007974',
+          },
+        }}
       >
         Login
       </Button>
