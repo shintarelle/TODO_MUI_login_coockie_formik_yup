@@ -15,17 +15,38 @@ import TodoListItem from '../../components/TodoListItem/TodoListItem';
 import { useNavigate } from 'react-router-dom';
 import routeNames from '../../router/routeNames';
 import { useDialog } from '../../contexts/DeleteDialogContext';
+import { useSnackbar } from '../../utils/hooks';
 
 const HomePage = () => {
   const [todoItems, setTodoItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [state, setState] = useState({
+    open: false,
+    vertical: 'bottom',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, open } = state;
+
   const navigate = useNavigate();
   const { handleClickOpen } = useDialog();
 
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+
   const handleDelete = id => {
-    const updatedTodoItems = todoItems.filter(item => item.id !== id);
-    setTodoItems(updatedTodoItems);
-    localStorageService.setData(updatedTodoItems);
+    try {
+      if (id === undefined) {
+        throw new Error('Delete failed');
+      }
+      const newData = localStorageService.deleteItem(id);
+      setTodoItems(newData);
+      setState({ vertical: 'bottom', horizontal: 'center', open: true });
+    } catch (error) {
+      setIsError(error.message || 'An error occurred');
+      setState({ vertical: 'bottom', horizontal: 'center', open: true });
+    }
   };
 
   const handleStatusChange = (id, newStatus) => {
@@ -42,6 +63,16 @@ const HomePage = () => {
   const openDeleteDialog = id => {
     handleClickOpen(() => handleDelete(id));
   };
+
+  const snackbarElement = useSnackbar({
+    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+    open: open,
+    autoHideDuration: 2000,
+    onClose: handleClose,
+    severity: isError ? 'error' : 'success',
+    color: isError ? '#b639b6' : '#d40015',
+    title: isError ? `Error... ${isError}` : 'Todo was successfully deleted',
+  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -101,6 +132,7 @@ const HomePage = () => {
                           status={item.status}
                           onDelete={openDeleteDialog}
                           onStatusChange={handleStatusChange}
+                          isEditMode={false}
                         />
                       </Grid>
                     ))
@@ -115,6 +147,7 @@ const HomePage = () => {
           </Container>
         </Grid>
       </Grid>
+      {snackbarElement}
     </BaseTemplate>
   );
 };

@@ -7,8 +7,8 @@ import routeNames from '../../router/routeNames';
 import BaseTemplate from '../../templates/BaseTemplate';
 import CastomHeading from '../../components/CastomHeading';
 import CreateTodoForm from '../../components/CreateTodoForm';
-import { Container, Typography, Alert } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
+import { Container } from '@mui/material';
+import { useSnackbar } from '../../utils/hooks';
 
 const formInitialValues = {
   title: '',
@@ -65,16 +65,31 @@ const CreateTodoItem = () => {
     }, 1500);
   };
 
-  // useEffect(() => {
-  //   if (open) {
-  //     console.log('Snackbar should be open now');
-  //   }
-  // }, [open]);
+  useEffect(() => {
+    if (isError) {
+      console.log('Error now', isError);
+    }
+  }, [isError]);
+  useEffect(() => {
+    if (open) {
+      console.log('Snackbar should be open now');
+    }
+  }, [open]);
   useEffect(() => {
     return () => {
       if (timerId.current) clearTimeout(timerId.current);
     };
   }, []);
+
+  const snackbarElement = useSnackbar({
+    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+    open: open,
+    autoHideDuration: 1000,
+    onClose: handleClose,
+    severity: isError ? 'error' : 'success',
+    color: isError ? '#b639b6' : '#007974',
+    title: isError ? 'Error...' : 'Todo was successfully created',
+  });
 
   return (
     <BaseTemplate className={'create-item-page'}>
@@ -85,8 +100,9 @@ const CreateTodoItem = () => {
           formInitialValues={formInitialValues}
           isLoading={isLoading}
         />
+        {snackbarElement}
 
-        {isError ? (
+        {/* {isError ? (
           <>
             <Typography>Oooops, something went wrong</Typography>
             <Snackbar
@@ -120,8 +136,8 @@ const CreateTodoItem = () => {
             >
               Todo was successfully created
             </Alert>
-          </Snackbar>
-        )}
+            </Snackbar>
+) */}
       </Container>
     </BaseTemplate>
   );

@@ -3,7 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { StorageKey } from '../../utils/const';
 import BaseTemplate from '../../templates/BaseTemplate';
 import CastomHeading from '../../components/CastomHeading/CastomHeading';
-import TodoItem from '../../components/TodoItem';
+import TodoListItem from '../../components/TodoListItem';
+import EditTodoListItem from '../../components/EditTodoListItem';
 import { Box } from '@mui/material';
 import routeNames from '../../router/routeNames';
 import localStorageService from '../../utils/functions';
@@ -19,7 +20,7 @@ function TodoItemPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedItems = JSON.parse(localStorageService.getData());
+    const storedItems = localStorageService.getData();
     const foundItem = storedItems.find(item => item.id === itemId);
     if (foundItem) {
       setTodoTitle(foundItem.title);
@@ -27,6 +28,10 @@ function TodoItemPage() {
       setTodoStatus(foundItem.status);
     }
   }, [itemId]);
+
+  const changeStatusEdit = () => {
+    setIsEdit(true);
+  };
 
   const handleDelete = () => {
     // const storedItems = JSON.parse(localStorage.getItem(StorageKey)) || [];
@@ -51,11 +56,17 @@ function TodoItemPage() {
   const handleSubmit = data => {
     setTodoTitle(data.title);
     setTodoDescription(data.description);
+    setTodoStatus(data.status);
     console.log(data);
-    const storedItems = JSON.parse(localStorage.getItem(StorageKey)) || [];
+    const storedItems = localStorageService.getData();
     const updatedTodoItems = storedItems.map(item => {
       if (item.id === itemId) {
-        return { ...item, title: data.title, description: data.description };
+        return {
+          ...item,
+          title: data.title,
+          description: data.description,
+          status: data.status,
+        };
       }
       return item;
     });
@@ -77,17 +88,32 @@ function TodoItemPage() {
         }}
       >
         <CastomHeading title={'Todo Item Page'} />
-        <TodoItem
-          id={itemId}
-          title={todoTitle}
-          description={todoDescription}
-          status={todoStatus}
-          onDelete={handleDelete}
-          onStatusChange={handleStatusChange}
-          handleSubmit={handleSubmit}
-          isEdit={isEdit}
-          setIsEdit={setIsEdit}
-        />
+        {isEdit ? (
+          <EditTodoListItem
+            id={itemId}
+            todoTitle={todoTitle}
+            setTodoTitle={setTodoTitle}
+            todoDescription={todoDescription}
+            setTodoDescription={setTodoDescription}
+            todoStatus={todoStatus}
+            setTodoStatus={setTodoStatus}
+            onDelete={handleDelete}
+            handleSubmit={handleSubmit}
+            setIsEdit={setIsEdit}
+          />
+        ) : (
+          <TodoListItem
+            id={itemId}
+            title={todoTitle}
+            description={todoDescription}
+            status={todoStatus}
+            onDelete={handleDelete}
+            setTodoStatus={setTodoStatus}
+            onStatusChange={handleStatusChange}
+            changeStatusEdit={changeStatusEdit}
+            isEditMode={true}
+          />
+        )}
       </Box>
     </BaseTemplate>
   );

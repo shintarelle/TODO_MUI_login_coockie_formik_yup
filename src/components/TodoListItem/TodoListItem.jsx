@@ -21,7 +21,10 @@ function TodoListItem({
   description,
   status,
   onDelete,
+  setTodoStatus,
   onStatusChange,
+  isEditMode,
+  changeStatusEdit,
 }) {
   const [itemStatus, setItemStatus] = React.useState(status);
   const navigate = useNavigate();
@@ -31,9 +34,13 @@ function TodoListItem({
   };
 
   const handleChange = event => {
-    const newStatus = event.target.value;
-    setItemStatus(newStatus);
-    onStatusChange(id, newStatus);
+    setItemStatus(event.target.value);
+    if (setTodoStatus) {
+      setTodoStatus(event.target.value);
+    }
+    if (onStatusChange) {
+      onStatusChange(id, event.target.value);
+    }
   };
 
   return (
@@ -41,6 +48,7 @@ function TodoListItem({
       elevation={6}
       style={{
         borderRadius: '10px',
+        width: '100%',
       }}
     >
       <Box
@@ -83,24 +91,25 @@ function TodoListItem({
             justifyContent={'flex-end'}
             py={'20px'}
           >
-            <IconButton
-              aria-label="edit"
-              onClick={e => {
-                onDelete(id);
-              }}
-              sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
-            >
-              <DrawIcon />
-            </IconButton>
-            <IconButton
-              aria-label="view"
-              onClick={e => {
-                handleViewTodo(id);
-              }}
-              sx={{ backgroundColor: '#87009d', color: '#fff' }}
-            >
-              <VisibilityIcon />
-            </IconButton>
+            {isEditMode ? (
+              <IconButton
+                aria-label="edit"
+                onClick={changeStatusEdit}
+                sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
+              >
+                <DrawIcon />
+              </IconButton>
+            ) : (
+              <IconButton
+                aria-label="view"
+                onClick={e => {
+                  handleViewTodo(id);
+                }}
+                sx={{ backgroundColor: '#87009d', color: '#fff' }}
+              >
+                <VisibilityIcon />
+              </IconButton>
+            )}
             <IconButton
               aria-label="delete"
               onClick={e => {
@@ -123,5 +132,8 @@ TodoListItem.propTypes = {
   status: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   onStatusChange: PropTypes.func.isRequired,
+  setTodoStatus: PropTypes.func,
+  isEditMode: PropTypes.bool,
+  changeStatusEdit: PropTypes.func,
 };
 export default TodoListItem;

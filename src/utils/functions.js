@@ -6,7 +6,7 @@ class LocalStorageService {
     this.key = key;
   }
   getData() {
-    return JSON.parse(localStorage.getItem(this.key));
+    return JSON.parse(localStorage.getItem(this.key)) || [];
   }
   setData(data) {
     if (!Array.isArray(data)) {
@@ -16,18 +16,19 @@ class LocalStorageService {
   }
   saveItem(data) {
     if (!data.id) throw new Error('no id on todo item');
-    const saveData = JSON.parse(this.getData());
+    const saveData = this.getData();
     const newData = [data, ...saveData];
     localStorage.setItem(this.key, JSON.stringify(newData));
     return this.getData().at(-1);
   }
   deleteItem(id) {
-    const localStorageData = JSON.parse(this.getData());
+    const localStorageData = this.getData();
     const filterItems = localStorageData.filter(item => item.id !== id);
     this.setData(filterItems);
+    return filterItems;
   }
   updateItem(id, fieldValue) {
-    const localStorageData = JSON.parse(this.getData());
+    const localStorageData = this.getData();
     const updatedTodoItems = localStorageData.map(item => {
       if (item.id === id) {
         return { ...item, status: fieldValue };
