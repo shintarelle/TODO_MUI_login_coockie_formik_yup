@@ -1,24 +1,24 @@
 import routeNames from './routeNames';
 import HomePage from '../pages/HomePage';
-import TodoListPage from '../pages/TodoListPage';
+import CreateTodoItem from '../pages/CreateTodoItem';
 import TodoItemPage from '../pages/TodoItemPage';
-import Login from '../pages/Login';
+import Login from '../pages/LoginPage';
 import NotFound from '../pages/NotFound';
 
 const pagesRoutesConfig = [
   {
-    path: routeNames.home,
-    component: HomePage,
+    path: routeNames.login,
+    component: Login,
     id: 1,
   },
   {
-    path: routeNames.login,
-    component: Login,
+    path: routeNames.home,
+    component: HomePage,
     id: 2,
   },
   {
-    path: routeNames.todolist,
-    component: TodoListPage,
+    path: routeNames.create,
+    component: CreateTodoItem,
     id: 3,
   },
   {

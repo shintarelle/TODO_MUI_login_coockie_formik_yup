@@ -1,12 +1,11 @@
-// import RouterMapping from './routes/RouterMapping';
-
-import RouterMapping from './routes/RouterMapping';
+import RouterMapping from './router/RouterMapping';
+import { DialogProvider } from './contexts/DeleteDialogContext';
 
 function App() {
   return (
-    <>
+    <DialogProvider>
       <RouterMapping />
-    </>
+    </DialogProvider>
   );
 }
 

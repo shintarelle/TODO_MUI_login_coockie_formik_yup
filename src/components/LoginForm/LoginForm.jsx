@@ -18,7 +18,6 @@ const LoginForm = () => {
     const hardcodedPassword = 'adminadmin';
 
     if (email === hardcodedEmail && password === hardcodedPassword) {
-      console.log('check');
       Cookies.set('loggedin', 'true');
       navigate('/home');
       setEmail('');

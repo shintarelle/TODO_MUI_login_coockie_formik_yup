@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Typography,
   Paper,
   Box,
-  Button,
   FormControl,
-  NativeSelect,
+  IconButton,
+  Select,
+  MenuItem,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DrawIcon from '@mui/icons-material/Draw';
 import { useNavigate } from 'react-router-dom';
-import routeNames from '../../routes/routeNames';
+import routeNames from '../../router/routeNames';
+import { ArrowBack } from '@mui/icons-material';
 
 function TodoListItem({
   id,
@@ -17,73 +22,119 @@ function TodoListItem({
   description,
   status,
   onDelete,
+  setTodoStatus,
   onStatusChange,
+  isEditMode,
+  changeStatusEdit,
 }) {
-  const [itemStatus, setItemStatus] = React.useState(status);
+  const [itemStatus, setItemStatus] = useState(status);
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
-    navigate(routeNames.todoitem.replace(':id', id));
+  const handleViewTodo = id => {
+    navigate(routeNames.todoitem.replace('id', `${id}`));
   };
 
   const handleChange = event => {
-    const newStatus = event.target.value;
-    setItemStatus(newStatus);
-    onStatusChange(id, newStatus);
+    setItemStatus(event.target.value);
+    if (setTodoStatus) {
+      setTodoStatus(event.target.value);
+    }
+    if (onStatusChange) {
+      onStatusChange(id, event.target.value);
+    }
   };
 
-  const handleSelectClick = event => {
-    event.stopPropagation();
-  };
   return (
-    <Box
-      onMouseDown={e => e.stopPropagation()}
-      onClick={handleCardClick}
-      style={{ cursor: 'pointer' }}
+    <Paper
+      elevation={6}
+      style={{
+        borderRadius: '10px',
+        width: '100%',
+      }}
     >
-      <Paper elevation={6} style={{ borderRadius: '10px' }}>
-        <Box display="flex" justifyContent={'space-between'} gap={1} p={2}>
-          <Box display="flex" flexDirection={'column'} gap={1}>
-            <Typography variant={'h6'} textAlign={'left'}>
-              {title}
-            </Typography>
-            <Typography variant={'subtitle1'}>{description}</Typography>
-          </Box>
+      <Box
+        display="flex"
+        flexDirection={'column'}
+        justifyContent={'space-between'}
+        gap={4}
+        p={2}
+        sx={{ backgroundColor: '#dff2f3', color: '#000' }}
+      >
+        <Typography variant={'h6'} textAlign={'left'}>
+          {title}
+        </Typography>
+        <Typography variant={'subtitle1'}>{description}</Typography>
+        <Box
+          sx={{ width: '100%' }}
+          display="flex"
+          flexDirection={'column'}
+          justifyContent={'space-between'}
+          gap={2}
+        >
+          <FormControl>
+            <Select
+              labelId="status-select-label"
+              id="status-select"
+              value={itemStatus}
+              onChange={handleChange}
+              size="small"
+              sx={{ width: 150 }}
+            >
+              <MenuItem value={'pending'}>Pending</MenuItem>
+              <MenuItem value={'completed'}>Completed</MenuItem>
+              <MenuItem value={'not-completed'}>Not-Completed</MenuItem>
+            </Select>
+          </FormControl>
           <Box
             display="flex"
-            flexDirection={'column'}
             gap={1}
-            maxWidth={'120px'}
+            width={'100%'}
+            justifyContent={'flex-end'}
+            py={'20px'}
           >
-            <FormControl fullWidth>
-              <NativeSelect
-                value={itemStatus}
-                onChange={handleChange}
-                onClick={handleSelectClick}
-                inputProps={{
-                  name: 'status',
-                  id: 'uncontrolled-native',
+            {isEditMode ? (
+              <>
+                <IconButton
+                  aria-label="back to Todo List"
+                  onClick={() => {
+                    navigate(routeNames.home);
+                  }}
+                  sx={{ backgroundColor: '#87009d', color: '#fff' }}
+                >
+                  <ArrowBack />
+                </IconButton>
+                <IconButton
+                  aria-label="edit"
+                  onClick={changeStatusEdit}
+                  sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
+                >
+                  <DrawIcon />
+                </IconButton>
+              </>
+            ) : (
+              <IconButton
+                aria-label="view"
+                onClick={e => {
+                  handleViewTodo(id);
                 }}
+                sx={{ backgroundColor: '#87009d', color: '#fff' }}
               >
-                <option value={'pending'}>Pending</option>
-                <option value={'completed'}>Completed</option>
-                <option value={'not-completed'}>Not-Completed</option>
-              </NativeSelect>
-            </FormControl>
-            <Button
-              variant={'contained'}
-              size="small"
+                <VisibilityIcon />
+              </IconButton>
+            )}
+            <IconButton
+              aria-label="delete"
               onClick={e => {
-                e.stopPropagation();
                 onDelete(id);
               }}
+              sx={{ backgroundColor: '#d40015', color: '#fff' }}
             >
-              Delete
-            </Button>
+              <DeleteIcon />
+            </IconButton>
           </Box>
         </Box>
-      </Paper>
-    </Box>
+      </Box>
+    </Paper>
   );
 }
 TodoListItem.propTypes = {
@@ -93,5 +144,8 @@ TodoListItem.propTypes = {
   status: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   onStatusChange: PropTypes.func.isRequired,
+  setTodoStatus: PropTypes.func,
+  isEditMode: PropTypes.bool,
+  changeStatusEdit: PropTypes.func,
 };
 export default TodoListItem;

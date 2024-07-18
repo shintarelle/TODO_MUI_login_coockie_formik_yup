@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../../components/LoginForm';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import LoginTemplate from '../../templates/LoginTemplate';
 
 function Login() {
   const navigate = useNavigate();
@@ -16,16 +17,9 @@ function Login() {
   }, [loggedIn, navigate]);
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <LoginTemplate>
       <LoginForm />
-    </div>
+    </LoginTemplate>
   );
 }
 
