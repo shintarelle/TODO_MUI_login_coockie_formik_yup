@@ -2,8 +2,7 @@ const routeNames = {
   login: '/',
   home: '/home',
   create: '/create',
-  todolist: '/todolist',
-  todoitem: '/todolist/:id',
+  todoitem: '/todo/:id',
   notFound: '*',
 };
 

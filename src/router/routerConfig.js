@@ -1,7 +1,6 @@
 import routeNames from './routeNames';
 import HomePage from '../pages/HomePage';
 import CreateTodoItem from '../pages/CreateTodoItem';
-import TodoListPage from '../pages/TodoListPage';
 import TodoItemPage from '../pages/TodoItemPage';
 import Login from '../pages/LoginPage';
 import NotFound from '../pages/NotFound';
@@ -23,19 +22,14 @@ const pagesRoutesConfig = [
     id: 3,
   },
   {
-    path: routeNames.todolist,
-    component: TodoListPage,
-    id: 4,
-  },
-  {
     path: routeNames.todoitem,
     component: TodoItemPage,
-    id: 5,
+    id: 4,
   },
   {
     path: routeNames.notFound,
     component: NotFound,
-    id: 6,
+    id: 5,
   },
 ];
 export default pagesRoutesConfig;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Paper,
@@ -12,8 +12,6 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import Done from '@mui/icons-material/Done';
 import Clear from '@mui/icons-material/Clear';
-import { useNavigate } from 'react-router-dom';
-import routeNames from '../../router/routeNames';
 
 function TodoListItem({
   id,
@@ -27,7 +25,6 @@ function TodoListItem({
   const [title, setTitle] = useState(todoTitle);
   const [description, setDescription] = useState(todoDescription);
   const [status, setStatus] = useState(todoStatus);
-  const navigate = useNavigate();
 
   const handleChangeTitle = e => {
     setTitle(e.target.value);

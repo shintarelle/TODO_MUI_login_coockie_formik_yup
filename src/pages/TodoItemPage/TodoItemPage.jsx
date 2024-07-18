@@ -5,7 +5,7 @@ import BaseTemplate from '../../templates/BaseTemplate';
 import CastomHeading from '../../components/CastomHeading/CastomHeading';
 import TodoListItem from '../../components/TodoListItem';
 import EditTodoListItem from '../../components/EditTodoListItem';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import routeNames from '../../router/routeNames';
 import localStorageService from '../../utils/functions';
 import { useSnackbar } from '../../utils/hooks';
@@ -14,6 +14,7 @@ function TodoItemPage() {
   const [todoTitle, setTodoTitle] = useState('');
   const [todoDescription, setTodoDescription] = useState('');
   const [todoStatus, setTodoStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isError, setIsError] = useState(false);
   const [state, setState] = useState({
@@ -74,6 +75,7 @@ function TodoItemPage() {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const storedItems = localStorageService.getData();
     const foundItem = storedItems.find(item => item.id === itemId);
     if (foundItem) {
@@ -81,6 +83,9 @@ function TodoItemPage() {
       setTodoDescription(foundItem.description);
       setTodoStatus(foundItem.status);
     }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
   }, [itemId]);
 
   const snackbarElement = useSnackbar({
@@ -107,7 +112,16 @@ function TodoItemPage() {
         }}
       >
         <CastomHeading title={'Todo Item Page'} />
-        {isEdit ? (
+        {isLoading ? (
+          <Box
+            height={'200px'}
+            display={'flex'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <CircularProgress />
+          </Box>
+        ) : isEdit ? (
           <EditTodoListItem
             id={itemId}
             todoTitle={todoTitle}
