@@ -27,15 +27,16 @@ class LocalStorageService {
     this.setData(filterItems);
     return filterItems;
   }
-  updateItem(id, fieldValue) {
+  updateItemStatus(id, newStatus) {
     const localStorageData = this.getData();
     const updatedTodoItems = localStorageData.map(item => {
       if (item.id === id) {
-        return { ...item, status: fieldValue };
+        return { ...item, status: newStatus };
       }
       return item;
     });
     this.setData(updatedTodoItems);
+    return updatedTodoItems;
   }
 }
 const localStorageService = new LocalStorageService(StorageKey);

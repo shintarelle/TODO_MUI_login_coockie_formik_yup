@@ -7,7 +7,7 @@ import routeNames from '../../router/routeNames';
 import BaseTemplate from '../../templates/BaseTemplate';
 import CastomHeading from '../../components/CastomHeading';
 import CreateTodoForm from '../../components/CreateTodoForm';
-import { Container } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import { useSnackbar } from '../../utils/hooks';
 
 const formInitialValues = {
@@ -66,16 +66,6 @@ const CreateTodoItem = () => {
   };
 
   useEffect(() => {
-    if (isError) {
-      console.log('Error now', isError);
-    }
-  }, [isError]);
-  useEffect(() => {
-    if (open) {
-      console.log('Snackbar should be open now');
-    }
-  }, [open]);
-  useEffect(() => {
     return () => {
       if (timerId.current) clearTimeout(timerId.current);
     };
@@ -100,44 +90,10 @@ const CreateTodoItem = () => {
           formInitialValues={formInitialValues}
           isLoading={isLoading}
         />
-        {snackbarElement}
 
-        {/* {isError ? (
-          <>
-            <Typography>Oooops, something went wrong</Typography>
-            <Snackbar
-              anchorOrigin={{ vertical, horizontal }}
-              open={open}
-              autoHideDuration={3000}
-              onClose={handleClose}
-            >
-              <Alert
-                onClose={handleClose}
-                severity="error"
-                variant="filled"
-                sx={{ width: '100%', backgroundColor: '#b639b6' }}
-              >
-                Error...
-              </Alert>
-            </Snackbar>
-          </>
-        ) : (
-          <Snackbar
-            anchorOrigin={{ vertical, horizontal }}
-            open={open}
-            autoHideDuration={1000}
-            onClose={handleClose}
-          >
-            <Alert
-              onClose={handleClose}
-              severity="success"
-              variant="filled"
-              sx={{ width: '100%', backgroundColor: '#007974' }}
-            >
-              Todo was successfully created
-            </Alert>
-            </Snackbar>
-) */}
+        {isError && <Typography>Oooops, something went wrong</Typography>}
+
+        {snackbarElement}
       </Container>
     </BaseTemplate>
   );

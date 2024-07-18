@@ -50,14 +50,11 @@ const HomePage = () => {
   };
 
   const handleStatusChange = (id, newStatus) => {
-    const updatedTodoItems = todoItems.map(item => {
-      if (item.id === id) {
-        return { ...item, status: newStatus };
-      }
-      return item;
-    });
+    const updatedTodoItems = localStorageService.updateItemStatus(
+      id,
+      newStatus,
+    );
     setTodoItems(updatedTodoItems);
-    localStorageService.setData(updatedTodoItems);
   };
 
   const openDeleteDialog = id => {

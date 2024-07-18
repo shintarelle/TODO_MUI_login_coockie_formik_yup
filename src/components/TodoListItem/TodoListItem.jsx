@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Typography,
@@ -14,6 +14,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import DrawIcon from '@mui/icons-material/Draw';
 import { useNavigate } from 'react-router-dom';
 import routeNames from '../../router/routeNames';
+import { ArrowBack } from '@mui/icons-material';
 
 function TodoListItem({
   id,
@@ -26,7 +27,7 @@ function TodoListItem({
   isEditMode,
   changeStatusEdit,
 }) {
-  const [itemStatus, setItemStatus] = React.useState(status);
+  const [itemStatus, setItemStatus] = useState(status);
   const navigate = useNavigate();
 
   const handleViewTodo = id => {
@@ -92,13 +93,24 @@ function TodoListItem({
             py={'20px'}
           >
             {isEditMode ? (
-              <IconButton
-                aria-label="edit"
-                onClick={changeStatusEdit}
-                sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
-              >
-                <DrawIcon />
-              </IconButton>
+              <>
+                <IconButton
+                  aria-label="back to Todo List"
+                  onClick={() => {
+                    navigate(routeNames.home);
+                  }}
+                  sx={{ backgroundColor: '#87009d', color: '#fff' }}
+                >
+                  <ArrowBack />
+                </IconButton>
+                <IconButton
+                  aria-label="edit"
+                  onClick={changeStatusEdit}
+                  sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
+                >
+                  <DrawIcon />
+                </IconButton>
+              </>
             ) : (
               <IconButton
                 aria-label="view"

@@ -8,16 +8,70 @@ import EditTodoListItem from '../../components/EditTodoListItem';
 import { Box } from '@mui/material';
 import routeNames from '../../router/routeNames';
 import localStorageService from '../../utils/functions';
+import { useSnackbar } from '../../utils/hooks';
 
 function TodoItemPage() {
   const [todoTitle, setTodoTitle] = useState('');
   const [todoDescription, setTodoDescription] = useState('');
   const [todoStatus, setTodoStatus] = useState('');
   const [isEdit, setIsEdit] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [state, setState] = useState({
+    open: false,
+    vertical: 'bottom',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, open } = state;
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
 
   let { id } = useParams();
   const itemId = id.slice(1);
   const navigate = useNavigate();
+
+  const changeStatusEdit = () => {
+    setIsEdit(true);
+  };
+
+  const handleDelete = () => {
+    localStorageService.deleteItem(itemId);
+    navigate(routeNames.home);
+  };
+
+  const handleStatusChange = (id, newStatus) => {
+    localStorageService.updateItemStatus(id, newStatus);
+  };
+
+  const handleSubmit = data => {
+    try {
+      if (data === undefined) {
+        throw new Error('Delete failed');
+      }
+      setTodoTitle(data.title);
+      setTodoDescription(data.description);
+      setTodoStatus(data.status);
+      const storedItems = localStorageService.getData();
+      const updatedTodoItems = storedItems.map(item => {
+        if (item.id === itemId) {
+          return {
+            ...item,
+            title: data.title,
+            description: data.description,
+            status: data.status,
+          };
+        }
+        return item;
+      });
+      localStorage.setItem(StorageKey, JSON.stringify(updatedTodoItems));
+      setIsEdit(false);
+      setState({ vertical: 'bottom', horizontal: 'center', open: true });
+    } catch (error) {
+      setIsError(error.message || 'An error occurred');
+      setState({ vertical: 'bottom', horizontal: 'center', open: true });
+    }
+  };
 
   useEffect(() => {
     const storedItems = localStorageService.getData();
@@ -29,50 +83,15 @@ function TodoItemPage() {
     }
   }, [itemId]);
 
-  const changeStatusEdit = () => {
-    setIsEdit(true);
-  };
-
-  const handleDelete = () => {
-    // const storedItems = JSON.parse(localStorage.getItem(StorageKey)) || [];
-    // const filterItems = storedItems.filter(item => item.id !== itemId);
-    // localStorage.setItem(StorageKey, JSON.stringify(filterItems));
-    localStorageService.deleteItem(itemId);
-    navigate(routeNames.home);
-  };
-
-  const handleStatusChange = (id, newStatus) => {
-    // const storedItems = localStorageService.getData();
-    // const updatedTodoItems = storedItems.map(item => {
-    //   if (item.id === itemId) {
-    //     return { ...item, status: newStatus };
-    //   }
-    //   return item;
-    // });
-    // localStorage.setItem(StorageKey, JSON.stringify(updatedTodoItems));
-    localStorageService.updateItem(id, newStatus);
-  };
-
-  const handleSubmit = data => {
-    setTodoTitle(data.title);
-    setTodoDescription(data.description);
-    setTodoStatus(data.status);
-    console.log(data);
-    const storedItems = localStorageService.getData();
-    const updatedTodoItems = storedItems.map(item => {
-      if (item.id === itemId) {
-        return {
-          ...item,
-          title: data.title,
-          description: data.description,
-          status: data.status,
-        };
-      }
-      return item;
-    });
-    localStorage.setItem(StorageKey, JSON.stringify(updatedTodoItems));
-    setIsEdit(false);
-  };
+  const snackbarElement = useSnackbar({
+    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+    open: open,
+    autoHideDuration: 2000,
+    onClose: handleClose,
+    severity: isError ? 'error' : 'success',
+    color: isError ? '#b639b6' : '#007974',
+    title: isError ? `Error... ${isError}` : 'Todo was successfully edited',
+  });
 
   // if (!todoItem) {
   //   return <div>Loading...</div>; // Можно добавить лоадер или другой UI для ожидания
@@ -115,6 +134,7 @@ function TodoItemPage() {
           />
         )}
       </Box>
+      {snackbarElement}
     </BaseTemplate>
   );
 }
