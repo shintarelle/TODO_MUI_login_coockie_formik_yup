@@ -98,9 +98,6 @@ function TodoItemPage() {
     title: isError ? `Error... ${isError}` : 'Todo was successfully edited',
   });
 
-  // if (!todoItem) {
-  //   return <div>Loading...</div>; // Можно добавить лоадер или другой UI для ожидания
-  // }
   return (
     <BaseTemplate className={'todo-item-page'}>
       <Box

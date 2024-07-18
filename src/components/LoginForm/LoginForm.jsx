@@ -56,7 +56,11 @@ const LoginForm = () => {
         required
       />
       {error && <Box sx={{ color: 'red' }}>{error}</Box>}
-      <Button type="submit" variant="contained" color="primary">
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{ backgroundColor: '#39b6b6', color: '#fff' }}
+      >
         Login
       </Button>
     </Box>

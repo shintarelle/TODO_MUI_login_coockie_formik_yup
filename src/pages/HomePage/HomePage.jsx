@@ -134,7 +134,11 @@ const HomePage = () => {
                       </Grid>
                     ))
                   ) : (
-                    <Typography variant="subtitle.1" gutterBottom>
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      sx={{ width: '100%', textAlign: 'center' }}
+                    >
                       no items
                     </Typography>
                   )}
